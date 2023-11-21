@@ -3,6 +3,11 @@
 version = 3
 
 [[package]]
+name = "akatsuki-pp"
+version = "0.9.6"
+source = "git+https://github.com/osuAkatsuki/akatsuki-pp-rs?rev=a8b4eaffb2274d2e86ff042b7327286e13b6488d#a8b4eaffb2274d2e86ff042b7327286e13b6488d"
+
+[[package]]
 name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -81,15 +86,9 @@ dependencies = [
 name = "rosu-pp"
 version = "0.9.4"
 dependencies = [
+ "akatsuki-pp",
  "neon",
- "rosu-pp 0.9.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
-
-[[package]]
-name = "rosu-pp"
-version = "0.9.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21a423903b205528da09d7db2f74facc3d5db3e67890e4c78e2c52bf77bcf00f"
 
 [[package]]
 name = "semver"

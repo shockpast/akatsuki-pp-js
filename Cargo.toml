@@ -11,6 +11,5 @@ exclude = ["index.node"]
 crate-type = ["cdylib"]
 
 [dependencies]
-neon = { version = "0.10", default-features = false, features = ["napi-6"] }
-rosu-pp = { version = "0.9.4" }
-
+neon = { version = "0.10.1", default-features = false, features = ["napi-6"] }
+akatsuki-pp = { git = "https://github.com/osuAkatsuki/akatsuki-pp-rs", rev = "a8b4eaffb2274d2e86ff042b7327286e13b6488d" }

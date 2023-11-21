@@ -24,148 +24,148 @@ const {
     calculatorCombo,
     calculatorPassedObjects,
     calculatorClockRate,
-} = require("./index.node");
+} = require("./index.node")
 
 class Beatmap {
     constructor(origin) {
-        this.map = beatmapNew(origin);
+        this.map = beatmapNew(origin)
     }
 
     fromPath(path) {
-        beatmapFromPath.call(this.map, path);
+        beatmapFromPath.call(this.map, path)
 
-        return this;
+        return this
     }
 
     fromContent(content) {
-        beatmapFromContent.call(this.map, content);
+        beatmapFromContent.call(this.map, content)
 
-        return this;
+        return this
     }
 
     fromBytes(bytes) {
-        beatmapFromBytes.call(this.map, bytes);
+        beatmapFromBytes.call(this.map, bytes)
 
-        return this;
+        return this
     }
 
     ar(ar) {
-        beatmapAr.call(this.map, ar);
+        beatmapAr.call(this.map, ar)
 
-        return this;
+        return this
     }
 
     cs(cs) {
-        beatmapCs.call(this.map, cs);
+        beatmapCs.call(this.map, cs)
 
-        return this;
+        return this
     }
 
     hp(hp) {
-        beatmapHp.call(this.map, hp);
+        beatmapHp.call(this.map, hp)
 
-        return this;
+        return this
     }
 
     od(od) {
-        beatmapOd.call(this.map, od);
+        beatmapOd.call(this.map, od)
 
-        return this;
+        return this
     }
 }
 
 class Calculator {
     constructor(params) {
-        this.calculator = calculatorNew(params);
+        this.calculator = calculatorNew(params)
     }
 
     mapAttributes(map) {
-        return calculatorMapAttrs.call(this.calculator, map);
+        return calculatorMapAttrs.call(this.calculator, map)
     }
 
     difficulty(map) {
-        return calculatorDifficulty.call(this.calculator, map);
+        return calculatorDifficulty.call(this.calculator, map)
     }
 
     performance(map) {
-        return calculatorPerformance.call(this.calculator, map);
+        return calculatorPerformance.call(this.calculator, map)
     }
 
     strains(map) {
-        return calculatorStrains.call(this.calculator, map);
+        return calculatorStrains.call(this.calculator, map)
     }
 
     mode(mode) {
-        calculatorMode.call(this.calculator, mode);
+        calculatorMode.call(this.calculator, mode)
 
-        return this;
+        return this
     }
 
     mods(mods) {
-        calculatorMods.call(this.calculator, mods);
+        calculatorMods.call(this.calculator, mods)
 
-        return this;
+        return this
     }
 
     acc(acc) {
-        calculatorAcc.call(this.calculator, acc);
+        calculatorAcc.call(this.calculator, acc)
 
-        return this;
+        return this
     }
 
     nGeki(nGeki) {
-        calculatorGeki.call(this.calculator, nGeki);
+        calculatorGeki.call(this.calculator, nGeki)
 
-        return this;
+        return this
     }
 
     nKatu(nKatu) {
-        calculatorKatu.call(this.calculator, nKatu);
+        calculatorKatu.call(this.calculator, nKatu)
 
-        return this;
+        return this
     }
 
     n300(n300) {
-        calculatorN300.call(this.calculator, n300);
+        calculatorN300.call(this.calculator, n300)
 
-        return this;
+        return this
     }
 
     n100(n100) {
-        calculatorN100.call(this.calculator, n100);
+        calculatorN100.call(this.calculator, n100)
 
-        return this;
+        return this
     }
 
     n50(n50) {
-        calculatorN50.call(this.calculator, n50);
+        calculatorN50.call(this.calculator, n50)
 
-        return this;
+        return this
     }
 
     nMisses(nMisses) {
-        calculatorMisses.call(this.calculator, nMisses);
+        calculatorMisses.call(this.calculator, nMisses)
 
-        return this;
+        return this
     }
 
     combo(combo) {
-        calculatorCombo.call(this.calculator, combo);
+        calculatorCombo.call(this.calculator, combo)
 
-        return this;
+        return this
     }
 
     passedObjects(passedObjects) {
-        calculatorPassedObjects.call(this.calculator, passedObjects);
+        calculatorPassedObjects.call(this.calculator, passedObjects)
 
-        return this;
+        return this
     }
 
     clockRate(clockRate) {
-        calculatorClockRate.call(this.calculator, clockRate);
+        calculatorClockRate.call(this.calculator, clockRate)
 
-        return this;
+        return this
     }
 }
 
-module.exports = { Beatmap, Calculator };
+module.exports = { Beatmap, Calculator }

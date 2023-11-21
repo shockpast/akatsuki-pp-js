@@ -5,16 +5,16 @@ use std::{
 
 use neon::{
     prelude::{Context, FunctionContext, Object},
-    result::{JsResult, NeonResult},
-    types::{Finalize, JsArray, JsBox, JsNumber, JsObject, JsString, JsUndefined},
+    result::{JsResult, NeonResult, Throw},
+    types::{Finalize, JsArray, JsBox, JsNumber, JsObject, JsString, JsUndefined}, handle::Handle,
 };
-use rosu_pp::{
-    beatmap::BeatmapAttributes,
-    catch::{CatchDifficultyAttributes, CatchPerformanceAttributes, CatchStrains},
-    mania::{ManiaDifficultyAttributes, ManiaPerformanceAttributes, ManiaStrains},
+use akatsuki_pp::{
     osu::{OsuDifficultyAttributes, OsuPerformanceAttributes, OsuStrains},
     taiko::{TaikoDifficultyAttributes, TaikoPerformanceAttributes, TaikoStrains},
-    Beatmap, BeatmapExt, DifficultyAttributes, GameMode, PerformanceAttributes, Strains,
+    catch::{CatchDifficultyAttributes, CatchPerformanceAttributes, CatchStrains},
+    mania::{ManiaDifficultyAttributes, ManiaPerformanceAttributes, ManiaStrains},
+    AnyPP, DifficultyAttributes, GameMode, PerformanceAttributes, BeatmapExt, Beatmap, Strains, AnyStars,
+    beatmap::BeatmapAttributes, Mods, osu_2019::OsuPP,
 };
 
 use crate::beatmap::Map;
@@ -213,7 +213,7 @@ impl Calculator {
         let this = cx.this().downcast_or_throw::<JsBox<Self>, _>(&mut cx)?;
         let this = this.inner.borrow();
 
-        let mut calc = map.stars();
+        let mut calc = AnyStars::new(&map);
 
         set_calc! { calc, this:
             mode,
@@ -225,7 +225,7 @@ impl Calculator {
         Self::convert_difficulty(&mut cx, calc.calculate())
     }
 
-    pub fn js_performance(mut cx: FunctionContext<'_>) -> JsResult<'_, JsObject> {
+    pub fn js_performance(mut cx: FunctionContext<'_>) -> Result<Handle<'_, JsObject>, Throw> {
         let map_opt = cx
             .argument_opt(0)
             .and_then(|arg| arg.downcast::<JsObject, _>(&mut cx).ok())
@@ -243,7 +243,11 @@ impl Calculator {
         let this = cx.this().downcast_or_throw::<JsBox<Self>, _>(&mut cx)?;
         let this = this.inner.borrow();
 
-        let mut calc = map.pp();
+        if (this.mods.is_some() && this.mods.unwrap().rx()) && ((this.mode.is_none() && map.mode == GameMode::Osu) || this.mode == Some(GameMode::Osu)) {
+            return Self::relax_performance(cx, &map);
+        }
+
+        let mut calc = AnyPP::new(&map);
 
         set_calc! { calc, this:
             mode,
@@ -580,6 +584,61 @@ impl Calculator {
         }
 
         Ok(res)
+    }
+
+    fn relax_performance<'c>(
+        mut cx: FunctionContext<'c>,
+        map: &Beatmap
+    ) -> JsResult<'c, JsObject> {
+        let mut calc = OsuPP::new(&map);
+
+        let this = cx.this().downcast_or_throw::<JsBox<Self>, _>(&mut cx)?;
+        let this = this.inner.borrow();
+
+        set_calc! { calc, this:
+            mods,
+            combo,
+            n300,
+            n100,
+            n50,
+            passed_objects,
+        };
+
+        if let Some(n_misses) = this.n_misses {
+            calc = calc.misses(n_misses);
+        }
+
+        if let Some(acc) = this.accuracy {
+            calc = calc.accuracy(acc as f32);
+        }
+
+        let attrs: akatsuki_pp::osu_2019::stars::OsuPerformanceAttributes = calc.calculate();
+
+        let new_attrs = OsuPerformanceAttributes {
+            difficulty: OsuDifficultyAttributes {
+                aim: attrs.difficulty.aim_strain,
+                speed: attrs.difficulty.speed_strain,
+                flashlight: 0.0,
+                slider_factor: 0.0,
+                speed_note_count: 0.0,
+                ar: attrs.difficulty.ar,
+                od: attrs.difficulty.od,
+                hp: attrs.difficulty.hp,
+                n_circles: attrs.difficulty.n_circles,
+                n_sliders: attrs.difficulty.n_sliders,
+                n_spinners: attrs.difficulty.n_spinners,
+                stars: attrs.difficulty.stars,
+                max_combo: attrs.difficulty.max_combo,
+            },
+            pp: attrs.pp,
+            pp_acc: attrs.pp_acc,
+            pp_aim: attrs.pp_aim,
+            pp_flashlight: attrs.pp_flashlight,
+            pp_speed: attrs.pp_speed,
+            effective_miss_count: attrs.effective_miss_count,
+        };
+
+        Self::convert_performance(&mut cx, PerformanceAttributes::Osu((new_attrs).into()))
     }
 
     fn set_number(

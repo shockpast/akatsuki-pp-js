@@ -8,7 +8,7 @@ use neon::{
         JsUndefined,
     },
 };
-use rosu_pp::Beatmap;
+use akatsuki_pp::Beatmap;
 
 use crate::error::ErrorExt;
 

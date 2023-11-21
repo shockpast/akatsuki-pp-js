@@ -1,4 +1,4 @@
-# rosu-pp-js
+# akatsuki-pp-js
 
 Difficulty and performance calculation for all [osu!](https://osu.ppy.sh/) modes.
 
