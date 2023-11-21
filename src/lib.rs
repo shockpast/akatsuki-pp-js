@@ -1,5 +1,3 @@
-#![deny(clippy::all, nonstandard_style, rust_2018_idioms, unused, warnings)]
-
 use neon::{prelude::ModuleContext, result::NeonResult};
 
 use crate::{beatmap::Map, calculator::Calculator};

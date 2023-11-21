@@ -3,18 +3,20 @@ use std::{
     cell::{Ref, RefCell},
 };
 
-use neon::{
-    prelude::{Context, FunctionContext, Object},
-    result::{JsResult, NeonResult, Throw},
-    types::{Finalize, JsArray, JsBox, JsNumber, JsObject, JsString, JsUndefined}, handle::Handle,
-};
 use akatsuki_pp::{
-    osu::{OsuDifficultyAttributes, OsuPerformanceAttributes, OsuStrains},
-    taiko::{TaikoDifficultyAttributes, TaikoPerformanceAttributes, TaikoStrains},
+    beatmap::BeatmapAttributes,
     catch::{CatchDifficultyAttributes, CatchPerformanceAttributes, CatchStrains},
     mania::{ManiaDifficultyAttributes, ManiaPerformanceAttributes, ManiaStrains},
-    AnyPP, DifficultyAttributes, GameMode, PerformanceAttributes, BeatmapExt, Beatmap, Strains, AnyStars,
-    beatmap::BeatmapAttributes, Mods, osu_2019::OsuPP,
+    osu::{OsuDifficultyAttributes, OsuPerformanceAttributes, OsuStrains},
+    osu_2019::OsuPP,
+    taiko::{TaikoDifficultyAttributes, TaikoPerformanceAttributes, TaikoStrains},
+    AnyPP, AnyStars, Beatmap, BeatmapExt, DifficultyAttributes, GameMode, Mods,
+    PerformanceAttributes, Strains,
+};
+use neon::{
+    prelude::{Context, FunctionContext, Object},
+    result::{JsResult, NeonResult},
+    types::{Finalize, JsArray, JsBox, JsNumber, JsObject, JsString, JsUndefined},
 };
 
 use crate::beatmap::Map;
@@ -225,7 +227,7 @@ impl Calculator {
         Self::convert_difficulty(&mut cx, calc.calculate())
     }
 
-    pub fn js_performance(mut cx: FunctionContext<'_>) -> Result<Handle<'_, JsObject>, Throw> {
+    pub fn js_performance(mut cx: FunctionContext<'_>) -> JsResult<'_, JsObject> {
         let map_opt = cx
             .argument_opt(0)
             .and_then(|arg| arg.downcast::<JsObject, _>(&mut cx).ok())
@@ -243,7 +245,10 @@ impl Calculator {
         let this = cx.this().downcast_or_throw::<JsBox<Self>, _>(&mut cx)?;
         let this = this.inner.borrow();
 
-        if (this.mods.is_some() && this.mods.unwrap().rx()) && ((this.mode.is_none() && map.mode == GameMode::Osu) || this.mode == Some(GameMode::Osu)) {
+        if (this.mods.is_some() && this.mods.unwrap().rx())
+            && ((this.mode.is_none() && map.mode == GameMode::Osu)
+                || this.mode == Some(GameMode::Osu))
+        {
             return Self::relax_performance(cx, &map);
         }
 
@@ -586,11 +591,8 @@ impl Calculator {
         Ok(res)
     }
 
-    fn relax_performance<'c>(
-        mut cx: FunctionContext<'c>,
-        map: &Beatmap
-    ) -> JsResult<'c, JsObject> {
-        let mut calc = OsuPP::new(&map);
+    fn relax_performance<'c>(mut cx: FunctionContext<'c>, map: &Beatmap) -> JsResult<'c, JsObject> {
+        let mut calc = OsuPP::new(map);
 
         let this = cx.this().downcast_or_throw::<JsBox<Self>, _>(&mut cx)?;
         let this = this.inner.borrow();
@@ -612,7 +614,7 @@ impl Calculator {
             calc = calc.accuracy(acc as f32);
         }
 
-        let attrs: akatsuki_pp::osu_2019::stars::OsuPerformanceAttributes = calc.calculate();
+        let attrs = calc.calculate();
 
         let new_attrs = OsuPerformanceAttributes {
             difficulty: OsuDifficultyAttributes {
@@ -638,7 +640,7 @@ impl Calculator {
             effective_miss_count: attrs.effective_miss_count,
         };
 
-        Self::convert_performance(&mut cx, PerformanceAttributes::Osu((new_attrs).into()))
+        Self::convert_performance(&mut cx, PerformanceAttributes::Osu(new_attrs))
     }
 
     fn set_number(

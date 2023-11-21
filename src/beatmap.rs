@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 
+use akatsuki_pp::Beatmap;
 use neon::{
     prelude::{Context, FunctionContext, Object},
     result::JsResult,
@@ -8,7 +9,6 @@ use neon::{
         JsUndefined,
     },
 };
-use akatsuki_pp::Beatmap;
 
 use crate::error::ErrorExt;
 
