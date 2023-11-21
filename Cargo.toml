@@ -1,5 +1,5 @@
 [package]
-name = "rosu-pp"
+name = "akatsuki-pp-js"
 version = "0.9.4"
 description = "osu! difficulty and pp calculation for all modes"
 authors = ["Max Ohn"]
