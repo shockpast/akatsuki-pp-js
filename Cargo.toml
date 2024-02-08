@@ -8,7 +8,7 @@ edition = "2021"
 exclude = ["index.node"]
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
 neon = { version = "0.10.1", default-features = false, features = ["napi-6"] }
