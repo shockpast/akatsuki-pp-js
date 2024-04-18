@@ -1,6 +1,6 @@
 {
     "name": "akatsuki-pp-js",
-    "version": "0.9.6",
+    "version": "0.9.8",
     "description": "osu! difficulty and pp calculation for all modes",
     "main": "index.js",
     "types": "index.d.ts",

@@ -11,5 +11,5 @@ exclude = ["index.node"]
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-neon = { version = "1.0.0", default-features = false, features = ["napi-experimental"] }
+neon = { version = "0.10.1", default-features = false, features = ["napi-experimental"] }
 akatsuki-pp = { git = "https://github.com/osuAkatsuki/akatsuki-pp-rs", rev = "5c97207f25cf9fd07252dca1ba68d785e2147ce1" }
