@@ -407,6 +407,8 @@ impl Calculator {
                 n_spinners,
                 stars,
                 max_combo,
+                aim_difficult_strain_count,
+                speed_difficult_strain_count,
             }) => {
                 Self::set_number(cx, "mode", &res, 0)?;
                 Self::set_number(cx, "aim", &res, aim)?;
@@ -421,6 +423,8 @@ impl Calculator {
                 Self::set_number(cx, "nSpinners", &res, n_spinners as f64)?;
                 Self::set_number(cx, "stars", &res, stars)?;
                 Self::set_number(cx, "maxCombo", &res, max_combo as f64)?;
+                Self::set_number(cx, "aimStrain", &res, aim_difficult_strain_count)?;
+                Self::set_number(cx, "speedStrain", &res, speed_difficult_strain_count)?;
             }
             DifficultyAttributes::Taiko(TaikoDifficultyAttributes {
                 stamina,
@@ -631,6 +635,8 @@ impl Calculator {
                 n_spinners: attrs.difficulty.n_spinners,
                 stars: attrs.difficulty.stars,
                 max_combo: attrs.difficulty.max_combo,
+                aim_difficult_strain_count: attrs.difficulty.aim_difficult_strain_count,
+                speed_difficult_strain_count: attrs.difficulty.speed_difficult_strain_count,
             },
             pp: attrs.pp,
             pp_acc: attrs.pp_acc,

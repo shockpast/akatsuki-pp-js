@@ -1,8 +1,8 @@
 [package]
 name = "akatsuki-pp-js"
-version = "0.9.8"
+version = "0.10.0"
 description = "osu! difficulty and pp calculation for all modes"
-authors = ["Max Ohn"]
+authors = ["Max Ohn", "shockpast"]
 license = "MIT"
 edition = "2021"
 exclude = ["index.node"]
@@ -12,7 +12,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 neon = { version = "0.10.1", default-features = false, features = ["napi-experimental"] }
-akatsuki-pp = { git = "https://github.com/osuAkatsuki/akatsuki-pp-rs", rev = "5c97207f25cf9fd07252dca1ba68d785e2147ce1" }
+akatsuki-pp = { git = "https://github.com/osuAkatsuki/akatsuki-pp-rs", rev = "b439e81dc0524d63c29fb5a2a202e4f8e00c2b3e" }
 
 [profile.release]
 lto = true

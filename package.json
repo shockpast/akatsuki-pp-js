@@ -1,6 +1,6 @@
 {
     "name": "akatsuki-pp-js",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "description": "osu! difficulty and pp calculation for all modes",
     "main": "index.js",
     "types": "index.d.ts",
@@ -11,10 +11,11 @@
         "install": "npm run build-release",
         "test": "cargo test"
     },
-    "author": "Max Ohn <ohn.m@hotmail.de>",
+    "author": "Max Ohn",
     "license": "MIT",
     "dependencies": {
-        "cargo-cp-artifact": "^0.1"
+        "akatsuki-pp-js": "file:",
+        "cargo-cp-artifact": "0.1.9"
     },
     "keywords": [
         "osu",
